@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>月やら日やら曜日やら表示するだけのサイト</title>
+    <style>
+        body {
+            color: white;
+            background-color: #a9a9a9;
+        }
+        #display_area {
+            width: 800px;
+            height: 600px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 500px;
+        }
+        #info {
+            font-size: 20px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function displayCurrentTime() {
+            const DAY_OF_THE_WEEK = ["日", "月", "火", "水", "木", "金", "土"];
+            const MODE = new URL(location.href).searchParams.get("mode");
+            const now = new Date();
+            let text;
+
+            switch (MODE) {
+                case "m":
+                    text = now.getMonth() + 1;
+                    break;
+                case "mm":
+                    text = (now.getMonth() + 1).toString().padStart(2, "0");
+                    break;
+                case "d":
+                    text = now.getDate();
+                    break;
+                case "dd":
+                    text = now.getDate().toString().padStart(2, "0");
+                    break;
+                case "youbi":
+                    text = DAY_OF_THE_WEEK[now.getDay()];
+                    break;
+                default:
+                    text = `
+                        <div id="info">
+                            OBSのプロパティでは幅800,縦600から変更せず、拡大縮小で大きさを変えてください。<br>
+                            カスタムCSSにてフォントや色を変更できます。<br>
+                            文字は1桁でも2桁でも中央は同じ位置に来るように調整してあります。<br><br>
+                            今開いているURLの後ろの"help"を下記のコマンドに書き換えてください。<br><br>
+                            コマンド一覧(7月2日の火曜日の場合):<br>
+                            ・m (7) <br>
+                            ・mm (07) <br>
+                            ・d (2) <br>
+                            ・dd (02) <br>
+                            ・youbi (火) <br>
+                        </div>
+                    `;
+            }
+
+            document.getElementById('display_area').innerHTML = text;
+        }
+
+        window.onload = function() {
+            displayCurrentTime();
+            setInterval(displayCurrentTime, 1000); // 1000msごとに更新
+        };
+    </script>
+</head>
+<body>
+    <div id="display_area"></div>
+</body>
+</html>
